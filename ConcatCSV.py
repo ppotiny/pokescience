@@ -16,7 +16,7 @@ main_csv = pd.read_csv('pokemon_species.csv')
 
 # drop unnecessary columns from main file
 main_csv = main_csv.drop(['evolves_from_species_id', 'color_id', 'shape_id', 'is_baby', 'hatch_counter',
-                          'growth_rate_id', 'forms_switchable', 'order', 'conquest_order'], axis=1)
+                          'growth_rate_id', 'forms_switchable', 'order', 'conquest_order', 'habitat_id'], axis=1)
 
 
 def merge_ids(csv1, csv2, left, right, drops):
@@ -26,6 +26,7 @@ def merge_ids(csv1, csv2, left, right, drops):
     csv1 = pd.merge(csv1, csv2, left_on=left, right_on=right)
     csv1 = csv1.drop([right], axis=1)
     return csv1
+
 
 # Pokemon type files are read in
 csv1= pd.read_csv('pokemon_types.csv')
@@ -37,6 +38,7 @@ csv1 = csv1.pivot(index='pokemon_id', columns='slot', values='identifier') # Mak
 csv1 = csv1.reset_index()  # Pivot got rid of our index column, let's add it again
 main_csv = merge_ids(main_csv, csv1, 'id', 'pokemon_id', [])  # Merge with the main file
 
+
 # Pokemon stats files are read in
 csv1= pd.read_csv('pokemon_stats.csv').drop(['effort'], axis=1)
 csv2 = pd.read_csv('stats.csv')
@@ -46,12 +48,6 @@ csv1 = csv1.pivot(index='pokemon_id', columns='identifier', values='base_stat')
 csv1 = csv1.reset_index()
 main_csv = merge_ids(main_csv, csv1, 'id', 'pokemon_id', [])
 
-# Pokemon habitat file is read in
-csv1 = pd.read_csv('pokemon_habitats.csv')
-csv1 = csv1.rename(columns=({'id': 'hab_id'}))
-main_csv = merge_ids(main_csv, csv1, 'habitat_id', 'hab_id', [])
-
-main_csv = main_csv.drop(['habitat_id'], axis=1)
 main_csv = main_csv.sort(columns='id')
 
 # Some features had common names, adjusted based on preference of names
