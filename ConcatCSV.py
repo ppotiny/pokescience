@@ -12,7 +12,7 @@ __author__ = 'Praneetha'
 
 import pandas as pd
 
-main_csv = pd.read_csv('veekun_data/pokemon_species.csv')
+main_csv = pd.read_csv('pokemon_species.csv')
 
 # drop unnecessary columns from main file
 main_csv = main_csv.drop(['evolves_from_species_id', 'color_id', 'shape_id', 'is_baby', 'hatch_counter',
@@ -28,8 +28,8 @@ def merge_ids(csv1, csv2, left, right, drops):
     return csv1
 
 # Pokemon type files are read in
-csv1= pd.read_csv('veekun_data/pokemon_types.csv')
-csv2 = pd.read_csv('veekun_data/types.csv')
+csv1= pd.read_csv('pokemon_types.csv')
+csv2 = pd.read_csv('types.csv')
 # These files are merged by their id
 csv1 = merge_ids(csv1, csv2, 'type_id', 'id', ['generation_id', 'damage_class_id'])
 csv1 = csv1.sort(columns='pokemon_id')  # Sort by pokemon species id
@@ -38,8 +38,8 @@ csv1 = csv1.reset_index()  # Pivot got rid of our index column, let's add it aga
 main_csv = merge_ids(main_csv, csv1, 'id', 'pokemon_id', [])  # Merge with the main file
 
 # Pokemon stats files are read in
-csv1= pd.read_csv('veekun_data/pokemon_stats.csv').drop(['effort'], axis=1)
-csv2 = pd.read_csv('veekun_data/stats.csv')
+csv1= pd.read_csv('pokemon_stats.csv').drop(['effort'], axis=1)
+csv2 = pd.read_csv('stats.csv')
 csv1 = merge_ids(csv1, csv2, 'stat_id', 'id', ['damage_class_id', 'is_battle_only', 'game_index'])
 csv1 = csv1.sort(columns='pokemon_id')
 csv1 = csv1.pivot(index='pokemon_id', columns='identifier', values='base_stat')
@@ -47,7 +47,7 @@ csv1 = csv1.reset_index()
 main_csv = merge_ids(main_csv, csv1, 'id', 'pokemon_id', [])
 
 # Pokemon habitat file is read in
-csv1 = pd.read_csv('veekun_data/pokemon_habitats.csv')
+csv1 = pd.read_csv('pokemon_habitats.csv')
 csv1 = csv1.rename(columns=({'id': 'hab_id'}))
 main_csv = merge_ids(main_csv, csv1, 'habitat_id', 'hab_id', [])
 
