@@ -52,6 +52,7 @@ csv1 = csv1.rename(columns=({'id': 'hab_id'}))
 main_csv = merge_ids(main_csv, csv1, 'habitat_id', 'hab_id', [])
 
 main_csv.drop(['habitat_id'], axis=1)
+main_csv = main_csv.sort(columns='id')
 
 # Some features had common names, adjusted based on preference of names
 main_csv = main_csv.rename(columns=({'identifier_x': 'species', 1: 'type1', 2: 'type2',
