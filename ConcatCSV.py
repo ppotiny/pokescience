@@ -51,7 +51,7 @@ csv1 = pd.read_csv('pokemon_habitats.csv')
 csv1 = csv1.rename(columns=({'id': 'hab_id'}))
 main_csv = merge_ids(main_csv, csv1, 'habitat_id', 'hab_id', [])
 
-main_csv.drop(['habitat_id'], axis=1)
+main_csv = main_csv.drop(['habitat_id'], axis=1)
 main_csv = main_csv.sort(columns='id')
 
 # Some features had common names, adjusted based on preference of names
